@@ -3,6 +3,7 @@
 
 import urllib, urllib2, json
 import argparse
+import os.path
 
 class Weather:
     def __init__(self,location,unit="f"):
@@ -38,10 +39,32 @@ class Weather:
         print("sunrise: "+self.__astronomy['sunrise']+", sunset: "+self.__astronomy['sunset'])
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(prog='weather.py', usage='python weather.py [-h] [-l location] [-u unit] [-a | -c | -d day | -s]')
+    parser = argparse.ArgumentParser(prog='weather.py', usage='python weather.py [-h] [-l location] [-u unit] [-a | -c | -d day] [-s]')
 
-    parser.add_argument('-l', metavar="location",required=True, help="locations")
-    parser.add_argument('-u', metavar="unit", choices=['f','c'], default='f', help="unit")
+    if os.path.exists('config.py'):
+        configFile = open("config.py",'r')
+        config = configFile.read().split('\n')
+
+        location = ""
+        unit = ""
+        for i in config:
+            substr = i.split('=')
+            if substr[0] == 'LOCATION':
+                location = substr[1]
+                parser.add_argument('-l', metavar="location",required=False, help="locations")
+            if substr[0] == 'UNIT':
+                unit = substr[1]
+                parser.add_argument('-u', metavar="unit", choices=['f','c'], help="unit")
+
+        if location == "":
+            parser.add_argument('-l', metavar="location",required=True, help="locations")
+        if unit == "":
+            parser.add_argument('-u', metavar="unit", choices=['f','c'],default='f', help="unit")
+
+    else:
+            parser.add_argument('-l', metavar="location",required=True, help="locations")
+            parser.add_argument('-u', metavar="unit", choices=['f','c'],default='f', help="unit")
+
     parser.add_argument('-a', action='store_true', help="equal to -c -d 5 -s")
     parser.add_argument('-c', action='store_true', help="current condition")
     parser.add_argument('-d', metavar="day", help="forecast")
@@ -53,7 +76,12 @@ if __name__ == "__main__":
     if not results['a'] and not results['c'] and not results['d'] and not results['s']:
         parser.error("Need at least one information type")
 
-    weather = Weather(results['l'], results['u'])
+    if results['l'] != None:
+        location = results['l']
+    if results['u'] != None:
+        unit = results['u']
+
+    weather = Weather(location, unit)
 
     if results['a']:
         weather.GetCurrent()
@@ -66,5 +94,4 @@ if __name__ == "__main__":
             weather.GetForecast(results['d'])
         if results['s']:
             weather.GetSun()
-
 
