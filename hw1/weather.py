@@ -86,7 +86,6 @@ if __name__ == "__main__":
     if results['a']:
         weather.GetCurrent()
         weather.GetForecast(5)
-        weather.GetSun()
     else:
         if results['c']:
             weather.GetCurrent()
