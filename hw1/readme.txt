@@ -74,7 +74,7 @@ DESCRIPTION
 NOTE
     This script could be executed by using ./youtube,py or python2.7 youtube.py command.
     If some problems happened because of the lack of package, try
-    pip install bs4 urllib urllib2 argparse
+    pip install bs4 urllib urllib2 argparse lxml
     
     Because some channel have closed the comment function, and even the like/dislike infomation would also be hided.
     Also, some of the result is a link of channel, so sometimes this information would be an error message.
