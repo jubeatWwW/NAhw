@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
     parser.add_argument('-a', action='store_true', help="equal to -c -d 5 -s")
     parser.add_argument('-c', action='store_true', help="current condition")
-    parser.add_argument('-d', metavar="day", help="forecast")
+    parser.add_argument('-d', metavar="day", help="forecast", type=int)
     parser.add_argument('-s', action="store_true", help="sunset/sunrise")
 
     args = parser.parse_args()
