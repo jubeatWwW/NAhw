@@ -76,5 +76,8 @@ if __name__ == "__main__":
     parser.add_argument('keyword')
     results = vars(parser.parse_args())
 
+    if results['p'] <= 0:
+        parser.error("Invalid page number")
+
     a = Youtube(results['keyword'],results['n'], results['p'])
     a.PrintAll()
